@@ -23,7 +23,7 @@ class Calculadora:
         self.cantDecimales= 0   #la cantidad de 0 que le voy a tener que agregar a el atributo de arriba
         self.resultadoNum= 0    #numerador que queda como resultado de la conversion a fraccion de resultado
         self.resultadoDen= 0    #denominador que queda como resultado de la conversion a fraccion de resultado
-        self.divisor= 0         #todos los numeros que haya en el rango del for i in range
+        self.divisor= 0         #todos los numeros que haya en el rango del for i in range. Sirve para iterar no mas.
         self.posibleMCD= []     #posibles maximo comun divisores del numerador
         self.maximoDivisorComun= 0
 
@@ -84,12 +84,16 @@ class Calculadora:
     def raizCuadrada(self):
         operacion= math.sqrt(self.num1) / math.sqrt(self.den1)
         self.resultado= operacion
-    
+        self.resultadoNum= math.sqrt(self.num1)
+        self.resultadoDeb= math.sqrt(self.den1)
+
     def potencia(self):
         self.ingresarPotencia()
         operacion= math.pow(self.num1, self.potenciar) / math.pow(self.den1, self.potenciar)
         self.resultado= operacion
-    
+        self.resultadoNum= math.pow(self.num1, self.potenciar)
+        self.resultadoDeb= math.pow(self.den1, self.potenciar)
+
     def ingresarPotencia(self):
         self.potenciar= int(input("Ingrese la potencia a la que quiere elevar la fracción: "))
 
@@ -127,43 +131,43 @@ class Calculadora:
         self.obtenerCantidadDeDecimales()
         self.agregar0aUnidadDecimal()
 
-
     #pasar de decimal a fraccion:
     def obtenerNumYDenEnteros(self):
-        self.resultadoNum= self.resultado * self.unidadDecimal
-        self.resultadoDen= 1 * self.unidadDecimal
+        self.resultadoNum= int(self.resultado * self.unidadDecimal)
+        self.resultadoDen= int(1 * self.unidadDecimal)
 
     def calcularPosiblesMCD(self):
         self.divisor= 0
         for i in range(self.resultadoNum):
-            self.divisor= self.divisor+1
+            self.divisor= self.divisor +1
             if self.resultadoNum % self.divisor == 0:
                 self.posibleMCD.append(i+1)
-        print(self.posibleMCD)#prueba
+        print(self.posibleMCD) #prueba
 
     def obtenerMCD(self):
         self.divisor= 0
-        print(self.divisor)#prueba
+        print(self.divisor) #prueba
         for i in range(self.resultadoDen):
-            self.divisor= self.divisor+1
+            self.divisor= self.divisor +1
             if self.resultadoDen % self.divisor == 0 and i+1 in self.posibleMCD:
                 self.maximoDivisorComun= i+1
-        print(self.maximoDivisorComun)#prueba
+        print(self.maximoDivisorComun)
 
     def simplificarFracciones(self):
-        pass
+        self.resultadoNum= self.resultadoNum/self.maximoDivisorComun
+        self.resultadoDen= self.resultadoDen/self.maximoDivisorComun
 
     def pasarDecimalAFraccion(self):
         self.obtenerNumYDenEnteros()
-        if self.resultadoNum < self.resultadoDen:
-            self.calcularPosiblesMCD()
-            self.obtenerMCD()
+        self.calcularPosiblesMCD()
+        self.obtenerMCD()
+        self.simplificarFracciones()
 
     def mostrarResultado(self):
         if self.operacion == 1:
-            print("La suma entre "+ str(self.num1) +"/"+str(self.den1)+" y "+str(self.num2)+"/"+str(self.den2)+" da como resultado: "+ str(self.resultado), "o bien "+str(self.resultadoNum) + "/" + str(self.resultadoDen))
+            print("La suma entre "+ str(self.num1) +"/"+str(self.den1)+" y "+str(self.num2)+"/"+str(self.den2)+" da como resultado:\nEntero:", str(self.resultado), "\nFraccion: "+str(self.resultadoNum) + "/" + str(self.resultadoDen))
         if self.operacion == 2:
-            print("La resta entre "+ str(self.num1) +"/"+str(self.den1)+" y "+str(self.num2)+"/"+str(self.den2)+" da como resultado: "+ str(self.resultado), "o bien "+str(self.resultadoNum) + "/" + str(self.resultadoDen))
+            print("La resta entre "+ str(self.num1) +"/"+str(self.den1)+" y "+str(self.num2)+"/"+str(self.den2)+" da como resultado:\nEntero:", str(self.resultado), "\nFraccion: "+str(self.resultadoNum) + "/" + str(self.resultadoDen))
         if self.operacion == 3:
             print("El producto entre "+ str(self.num1) +"/"+str(self.den1)+" y "+str(self.num2)+"/"+str(self.den2)+" da como resultado: "+ str(self.resultado), "o bien "+str(self.resultadoNum) + "/" + str(self.resultadoDen))
         if self.operacion == 4:
@@ -188,8 +192,6 @@ def off():
 #main------------------------------------------------------------------------------------------
 calc0000= Calculadora()
 on= Q_realizarOperaciones()
-calc0000.calcularPosiblesMCD()#prueba
-calc0000.obtenerMCD()#prueba
 while on == True:
     calc0000.menu()
     calc0000.ingresarOpcion()
@@ -201,6 +203,5 @@ while on == True:
     calc0000.obtenerUnidadDecimal()
     calc0000.pasarDecimalAFraccion()
     calc0000.mostrarResultado()
-    print(calc0000.unidadDecimal)
     on= Q_realizarOperaciones()
 off()
